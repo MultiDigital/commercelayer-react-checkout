@@ -31,33 +31,36 @@ import {
 
 interface Props {
   appCtx: AppProviderData
+  readonly?: boolean
 }
 
-export const OrderSummary: React.FC<Props> = ({ appCtx }) => {
+export const OrderSummary: React.FC<Props> = ({ appCtx, readonly }) => {
   const { t } = useTranslation()
 
   return (
     <>
       <LineItemsContainer>
-        <SummaryHeader>
-          <SummaryTitle data-cy="test-summary">
-            {t("orderRecap.order_summary")}
-          </SummaryTitle>
-          <SummarySubTitle>
-            <LineItemsCount>
-              {(props) =>
-                t("orderRecap.cartContains", { count: props.quantity })
-              }
-            </LineItemsCount>
-          </SummarySubTitle>
-        </SummaryHeader>
+        {!readonly && (
+          <SummaryHeader>
+            <SummaryTitle data-cy="test-summary">
+              {t("orderRecap.order_summary")}
+            </SummaryTitle>
+            <SummarySubTitle>
+              <LineItemsCount>
+                {(props) =>
+                  t("orderRecap.cartContains", { count: props.quantity })
+                }
+              </LineItemsCount>
+            </SummarySubTitle>
+          </SummaryHeader>
+        )}
         <LineItemTypes type="skus" />
         <LineItemTypes type="gift_cards" />
       </LineItemsContainer>
       <TotalWrapper>
         <AmountSpacer />
         <AmountWrapper>
-          <CouponOrGiftCard />
+          <CouponOrGiftCard readonly={readonly} />
           <RecapLine>
             <RecapLineItem>{t("orderRecap.subtotal_amount")}</RecapLineItem>
             <SubTotalAmount />
