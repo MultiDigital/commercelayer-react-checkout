@@ -36,6 +36,7 @@ import {
 } from "./styled"
 
 interface Props {
+  allSkus: string[]
   appCtx: AppProviderData
 }
 

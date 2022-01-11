@@ -30,6 +30,7 @@ import styled from "styled-components"
 import tw from "twin.macro"
 
 interface Props {
+  allSkus: string[]
   type: LineItemType
 }
 
