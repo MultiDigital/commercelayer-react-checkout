@@ -1,6 +1,9 @@
 import {
   LineItemsContainer,
+  LineItem,
+  LineItemCode,
   LineItemsCount,
+  LineItemQuantity,
   TaxesAmount,
   ShippingAmount,
   TotalAmount,
@@ -13,7 +16,9 @@ import {
 import { Trans, useTranslation } from "react-i18next"
 
 import { AppProviderData } from "components/data/AppProvider"
+
 import "twin.macro"
+import { Box } from "@theme-ui/components"
 
 import { CouponOrGiftCard } from "./CouponOrGiftCard"
 import { LineItemTypes } from "./LineItemTypes"
@@ -34,11 +39,11 @@ interface Props {
   appCtx: AppProviderData
 }
 
-export const OrderSummary: React.FC<Props> = ({ appCtx }) => {
+export const OrderSummary: React.FC<Props> = ({ allSkus, appCtx }) => {
   const { t } = useTranslation()
 
   return (
-    <>
+    <Box sx={{ pb: [5] }}>
       <LineItemsContainer>
         <SummaryHeader>
           <SummaryTitle data-cy="test-summary">
@@ -52,13 +57,11 @@ export const OrderSummary: React.FC<Props> = ({ appCtx }) => {
             </LineItemsCount>
           </SummarySubTitle>
         </SummaryHeader>
-        <LineItemTypes type="skus" />
-        <LineItemTypes type="gift_cards" />
+        <LineItemTypes type="skus" allSkus={allSkus} />
       </LineItemsContainer>
       <TotalWrapper>
         <AmountSpacer />
         <AmountWrapper>
-          <CouponOrGiftCard />
           <RecapLine>
             <RecapLineItem>{t("orderRecap.subtotal_amount")}</RecapLineItem>
             <SubTotalAmount />
@@ -196,6 +199,6 @@ export const OrderSummary: React.FC<Props> = ({ appCtx }) => {
           </RecapLineTotal>
         </AmountWrapper>
       </TotalWrapper>
-    </>
+    </Box>
   )
 }

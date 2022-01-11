@@ -1,7 +1,9 @@
 import { CustomerContainer } from "@commercelayer/react-components"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import tw from "twin.macro"
+
+import { useVariant } from "../../hooks/useSkus"
 
 import { CheckoutSkeleton } from "components/composite/CheckoutSkeleton"
 import { MainHeader } from "components/composite/MainHeader"
@@ -49,6 +51,8 @@ const Checkout: React.FC<Props> = ({
   termsUrl,
   privacyUrl,
 }) => {
+  const [allSkus, setAllSkus] = useState([])
+
   const ctx = useContext(AppContext)
 
   const { activeStep, lastActivableStep, setActiveStep, steps } =
@@ -61,6 +65,15 @@ const Checkout: React.FC<Props> = ({
   if (!ctx || ctx.isFirstLoading) {
     return <CheckoutSkeleton />
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await useVariant()
+      setAllSkus(res) // parse json
+    }
+    if (allSkus.length < 1) fetchData()
+  }, [])
+
   const renderComplete = () => {
     return (
       <StepComplete
@@ -85,9 +98,9 @@ const Checkout: React.FC<Props> = ({
                 className="hidden md:block"
               />
               <SummaryWrapper>
-                <OrderSummary appCtx={ctx} />
+                <OrderSummary allSkus={allSkus} appCtx={ctx} />
               </SummaryWrapper>
-              <Footer />
+              {/* <Footer /> */}
             </Sidebar>
           }
           main={
@@ -137,7 +150,11 @@ const Checkout: React.FC<Props> = ({
                         <StepHeaderShipping step={getStepNumber("Shipping")} />
                       }
                     >
-                      <StepShipping className="mb-6" step={2} />
+                      <StepShipping
+                        className="mb-6"
+                        step={2}
+                        allSkus={allSkus}
+                      />
                     </AccordionItem>
                   </AccordionProvider>
                 )}

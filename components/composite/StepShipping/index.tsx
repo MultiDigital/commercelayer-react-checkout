@@ -4,6 +4,7 @@ import {
   ShipmentsContainer,
   LineItemImage,
   LineItemName,
+  LineItemCode,
   LineItemQuantity,
   ShippingMethodName,
   ShippingMethod,
@@ -15,6 +16,21 @@ import {
   ShipmentField,
 } from "@commercelayer/react-components"
 import { ShippingMethod as ShippingMethodCollection } from "@commercelayer/sdk"
+import {
+  Box,
+  Flex,
+  Checkbox,
+  Grid,
+  Image,
+  Label,
+  Card,
+  Radio,
+  Heading,
+  Divider,
+  Text,
+  Container,
+  Input,
+} from "@theme-ui/components"
 import classNames from "classnames"
 import { useTranslation, Trans } from "next-i18next"
 import { useContext, useState, useEffect } from "react"
@@ -88,7 +104,7 @@ export const StepHeaderShipping: React.FC<HeaderProps> = ({ step }) => {
   )
 }
 
-export const StepShipping: React.FC<Props> = () => {
+export const StepShipping: React.FC<Props> = ({ allSkus }) => {
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const gtmCtx = useContext(GTMContext)
@@ -250,6 +266,102 @@ export const StepShipping: React.FC<Props> = () => {
                     </GridContainer>
                     <LineItemsContainer>
                       <LineItem>
+                        <ShippingWrapper>
+                          <ShippingLineItemDescription>
+                            <ShippingLineItemTitle>
+                              <LineItemCode>
+                                {(props) => {
+                                  const item = allSkus
+                                    .map((sku) => {
+                                      if (props.lineItem.sku_code === sku.sku)
+                                        return { ...sku, ...props.lineItem }
+                                    })
+                                    .filter(
+                                      (notUndefined) =>
+                                        notUndefined !== undefined
+                                    )[0]
+
+                                  return (
+                                    item && (
+                                      <Flex
+                                        columns={[4]}
+                                        sx={{
+                                          alignContent: "centet",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <Flex>
+                                          <Box
+                                            sx={{
+                                              width: ["50px"],
+                                              height: ["auto"],
+                                              top: 0,
+                                              left: 0,
+                                            }}
+                                          >
+                                            {item.image && (
+                                              <img
+                                                alt=""
+                                                src={item.image.url}
+                                                alt=""
+                                              />
+                                            )}
+                                          </Box>
+                                          <Flex
+                                            sx={{
+                                              flexDirection: "column",
+                                              ml: [3],
+                                            }}
+                                          >
+                                            <Flex
+                                              sx={{
+                                                justifyContent: "space-between",
+                                              }}
+                                            >
+                                              <Box>
+                                                <Heading
+                                                  as="h6"
+                                                  variant="h6"
+                                                  sx={{
+                                                    my: 0,
+                                                    mb: 2,
+                                                    fontWeight: "normal",
+                                                  }}
+                                                >
+                                                  {item.displayName}
+                                                </Heading>
+                                              </Box>
+                                            </Flex>
+                                            <Flex>
+                                              <Text> {item.size.name} </Text>
+                                              <Text> &nbsp; - &nbsp; </Text>
+                                              <Text> {item.color.name} </Text>
+                                            </Flex>
+                                            <Box>
+                                              <ShippingLineItemQty>
+                                                <LineItemQuantity>
+                                                  {(props) =>
+                                                    !!props.quantity &&
+                                                    t("orderRecap.quantity", {
+                                                      count: props.quantity,
+                                                    })
+                                                  }
+                                                </LineItemQuantity>
+                                              </ShippingLineItemQty>
+                                            </Box>
+                                          </Flex>
+                                        </Flex>
+                                      </Flex>
+                                    )
+                                  )
+                                }}
+                              </LineItemCode>
+                            </ShippingLineItemTitle>
+                          </ShippingLineItemDescription>
+                        </ShippingWrapper>
+                      </LineItem>
+                      {/* <LineItem>
                         <ShippingLineItem>
                           <LineItemImage
                             className="self-start p-1 border rounded"
@@ -291,7 +403,7 @@ export const StepShipping: React.FC<Props> = () => {
                             </div>
                           </StockTransfer>
                         </div>
-                      </LineItem>
+                      </LineItem> */}
                     </LineItemsContainer>
                   </ShippingWrapper>
                 </Shipment>

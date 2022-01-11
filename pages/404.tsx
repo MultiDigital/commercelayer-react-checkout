@@ -24,7 +24,7 @@ const Invalid: NextPage = () => {
               <Text data-cy="invalid-checkout">{t("general.invalid")}</Text>
             </Error>
           </Main>
-          <Footer />
+          {/* <Footer /> */}
         </Wrapper>
       </Container>
     </Base>

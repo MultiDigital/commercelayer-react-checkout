@@ -9,6 +9,22 @@ import {
   LineItemCode,
 } from "@commercelayer/react-components"
 import { LineItemType } from "@commercelayer/react-components/lib/cjs/typings"
+import {
+  Box,
+  Flex,
+  Checkbox,
+  Grid,
+  Image,
+  Label,
+  Card,
+  Radio,
+  Heading,
+  Divider,
+  Text,
+  Container,
+  Input,
+  Button,
+} from "@theme-ui/components"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 import tw from "twin.macro"
@@ -17,36 +33,103 @@ interface Props {
   type: LineItemType
 }
 
-export const LineItemTypes: React.FC<Props> = ({ type }) => {
+export const LineItemTypes: React.FC<Props> = ({ allSkus, type }) => {
   const { t } = useTranslation()
 
   return (
-    <LineItem type={type}>
-      <LineItemWrapper>
-        <LineItemImage
-          width={85}
-          className="self-start p-1 bg-white border rounded"
-        />
-        <LineItemDescription>
-          <StyledLineItemSkuCode />
-          <LineItemTitle>
-            <LineItemName className="font-bold" />
-            <LineItemAmount className="pl-2 text-lg font-extrabold" />
-          </LineItemTitle>
-          <LineItemOptions showAll showName={false}>
-            <StyledLineItemOption />
-          </LineItemOptions>
-          <LineItemQty>
-            <LineItemQuantity>
-              {(props) =>
-                !!props.quantity &&
-                t("orderRecap.quantity", { count: props.quantity })
-              }
-            </LineItemQuantity>
-          </LineItemQty>
-        </LineItemDescription>
-      </LineItemWrapper>
-    </LineItem>
+    <>
+      <LineItem type={type}>
+        <LineItemWrapper>
+          <LineItemDescription>
+            <LineItemTitle>
+              <LineItemCode>
+                {(props) => {
+                  const item = allSkus
+                    .map((sku) => {
+                      if (props.lineItem.sku_code === sku.sku)
+                        return { ...sku, ...props.lineItem }
+                    })
+                    .filter((notUndefined) => notUndefined !== undefined)[0]
+
+                  return (
+                    item && (
+                      <Flex
+                        columns={[4]}
+                        sx={{
+                          alignContent: "centet",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Flex>
+                          <Box
+                            sx={{
+                              width: ["100px"],
+                              height: ["auto"],
+                              top: 0,
+                              left: 0,
+                            }}
+                          >
+                            {item.image && (
+                              <img alt="" src={item.image.url} alt="" />
+                            )}
+                          </Box>
+                          <Flex
+                            sx={{
+                              flexDirection: "column",
+                              ml: [3],
+                            }}
+                          >
+                            <Box>
+                              <StyledLineItemSkuCode />
+                            </Box>
+                            <Flex sx={{ justifyContent: "space-between" }}>
+                              <Box>
+                                <Heading
+                                  as="h6"
+                                  variant="h6"
+                                  sx={{
+                                    my: 0,
+                                    mb: 2,
+                                    fontWeight: "normal",
+                                  }}
+                                >
+                                  {item.displayName}
+                                </Heading>
+                              </Box>
+                            </Flex>
+                            <Flex>
+                              <Text> {item.size.name} </Text>
+                              <Text> &nbsp; - &nbsp; </Text>
+                              <Text> {item.color.name} </Text>
+                            </Flex>
+                            <Box>
+                              <LineItemQty>
+                                <LineItemQuantity>
+                                  {(props) =>
+                                    !!props.quantity &&
+                                    t("orderRecap.quantity", {
+                                      count: props.quantity,
+                                    })
+                                  }
+                                </LineItemQuantity>
+                              </LineItemQty>
+                            </Box>
+                          </Flex>
+                        </Flex>
+                      </Flex>
+                    )
+                  )
+                }}
+              </LineItemCode>
+            </LineItemTitle>
+            <LineItemOptions showAll showName={false}>
+              <StyledLineItemOption />
+            </LineItemOptions>
+          </LineItemDescription>
+        </LineItemWrapper>
+      </LineItem>
+    </>
   )
 }
 
