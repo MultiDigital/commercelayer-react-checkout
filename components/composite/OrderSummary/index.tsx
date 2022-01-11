@@ -13,12 +13,12 @@ import {
   AdjustmentAmount,
   GiftCardAmount,
 } from "@commercelayer/react-components"
+import { Box } from "@theme-ui/components"
 import { Trans, useTranslation } from "react-i18next"
 
 import { AppProviderData } from "components/data/AppProvider"
 
 import "twin.macro"
-import { Box } from "@theme-ui/components"
 
 import { CouponOrGiftCard } from "./CouponOrGiftCard"
 import { LineItemTypes } from "./LineItemTypes"
@@ -35,8 +35,27 @@ import {
   RecapLineItem,
 } from "./styled"
 
+interface Sku {
+  id: string
+  displayName: string
+  sku: string
+  image: {
+    url: string
+  }
+  size: {
+    id: string
+    name: string
+  }
+  color: {
+    id: string
+    name: string
+    colorSwitcher: {
+      hex: string
+    }
+  }
+}
 interface Props {
-  allSkus: string[]
+  allSkus: Sku[]
   appCtx: AppProviderData
 }
 

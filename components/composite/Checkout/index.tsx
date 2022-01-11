@@ -66,14 +66,6 @@ const Checkout: React.FC<Props> = ({
     return <CheckoutSkeleton />
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await useVariant()
-      setAllSkus(res) // parse json
-    }
-    if (allSkus.length < 1) fetchData()
-  }, [])
-
   const renderComplete = () => {
     return (
       <StepComplete
@@ -85,6 +77,15 @@ const Checkout: React.FC<Props> = ({
       />
     )
   }
+
+  useEffect(() => {
+    console.log(22)
+    const fetchData = async () => {
+      const res = await useVariant()
+      setAllSkus(res) // parse json
+    }
+    if (allSkus.length < 1) fetchData()
+  }, [])
 
   const renderSteps = () => {
     return (

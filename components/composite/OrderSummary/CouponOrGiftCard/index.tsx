@@ -22,17 +22,16 @@ import {
 import "twin.macro"
 
 export const CouponOrGiftCard: React.FC = () => {
-  const { t } = useTranslation()
-
+  const [codeError, setCodeError] = useState(false)
   const appCtx = useContext(AppContext)
+
+  const { t } = useTranslation()
 
   if (!appCtx) {
     return null
   }
 
   const { refetchOrder } = appCtx
-
-  const [codeError, setCodeError] = useState(false)
 
   const handleSubmit = async ({ success }: { success: boolean }) => {
     if (!success) return setCodeError(true)

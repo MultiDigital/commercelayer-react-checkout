@@ -1,4 +1,6 @@
-export const theme = {
+import { Theme } from "theme-ui"
+
+export const theme: Theme = {
   colors: {
     text: "#15212B",
     textLight: "#FFFFFF",
@@ -283,21 +285,6 @@ export const theme = {
       maxWidth: "100%",
     },
   },
-  inputs: {
-    primary: {
-      p: [3],
-      border: "2px solid",
-      borderColor: "gray",
-      borderRadius: [4],
-      cursor: "pointer",
-      "&:focus": {
-        outline: "none",
-        color: "text",
-        border: "2px solid",
-        borderColor: "primary",
-      },
-    },
-  },
   buttons: {
     primary: {
       color: "white",
@@ -382,5 +369,3 @@ export const theme = {
     },
   },
 }
-
-export default theme

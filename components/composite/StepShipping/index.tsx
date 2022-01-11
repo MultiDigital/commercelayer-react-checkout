@@ -57,9 +57,27 @@ import {
   ShippingLineItemQty,
   StyledShippingMethodRadioButton,
 } from "./styled"
-
+interface Sku {
+  id: string
+  displayName: string
+  sku: string
+  image: {
+    url: string
+  }
+  size: {
+    id: string
+    name: string
+  }
+  color: {
+    id: string
+    name: string
+    colorSwitcher: {
+      hex: string
+    }
+  }
+}
 interface Props {
-  allSkus: string[]
+  allSkus: Sku[]
   className?: string
   step: number
 }
@@ -285,7 +303,6 @@ export const StepShipping: React.FC<Props> = ({ allSkus }) => {
                                   return (
                                     item && (
                                       <Flex
-                                        columns={[4]}
                                         sx={{
                                           alignContent: "centet",
                                           justifyContent: "space-between",
@@ -305,7 +322,6 @@ export const StepShipping: React.FC<Props> = ({ allSkus }) => {
                                               <img
                                                 alt=""
                                                 src={item.image.url}
-                                                alt=""
                                               />
                                             )}
                                           </Box>

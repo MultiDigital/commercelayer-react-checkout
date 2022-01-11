@@ -1,6 +1,7 @@
+/* eslint-disable */
 import { request } from "../../lib/datocms"
 
-const SKUS_QUERY = `query VariantQuery {
+const SKU_QUERY: string = `query VariantQuery {
   allVariants {
     id
     displayName
@@ -25,12 +26,15 @@ const SKUS_QUERY = `query VariantQuery {
 }
 `
 
-export const useVariant = async () => {
+export const useVariant = async (query: any = SKU_QUERY, variables?: any, preview?: any) => {
   const data = await request({
-    query: SKUS_QUERY,
+    query,
+    variables,
+    preview
   })
 
-  const i18nVariant = data.allVariants.filter((link) => link)
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const i18nVariant = data.allVariants.filter((link: object) => link)
 
   return i18nVariant
 }

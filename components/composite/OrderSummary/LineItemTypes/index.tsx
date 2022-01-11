@@ -29,8 +29,27 @@ import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 import tw from "twin.macro"
 
+interface Sku {
+  id: string
+  displayName: string
+  sku: string
+  image: {
+    url: string
+  }
+  size: {
+    id: string
+    name: string
+  }
+  color: {
+    id: string
+    name: string
+    colorSwitcher: {
+      hex: string
+    }
+  }
+}
 interface Props {
-  allSkus: string[]
+  allSkus: Sku[]
   type: LineItemType
 }
 
@@ -55,7 +74,6 @@ export const LineItemTypes: React.FC<Props> = ({ allSkus, type }) => {
                   return (
                     item && (
                       <Flex
-                        columns={[4]}
                         sx={{
                           alignContent: "centet",
                           justifyContent: "space-between",
@@ -71,9 +89,7 @@ export const LineItemTypes: React.FC<Props> = ({ allSkus, type }) => {
                               left: 0,
                             }}
                           >
-                            {item.image && (
-                              <img alt="" src={item.image.url} alt="" />
-                            )}
+                            {item.image && <img alt="" src={item.image.url} />}
                           </Box>
                           <Flex
                             sx={{

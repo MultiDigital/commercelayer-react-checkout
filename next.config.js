@@ -1,5 +1,7 @@
 module.exports = {
-  eslint: {},
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config) => {
     return config
   },
