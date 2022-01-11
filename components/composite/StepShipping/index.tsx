@@ -294,6 +294,7 @@ export const StepShipping: React.FC<Props> = ({ allSkus }) => {
                                     .map((sku) => {
                                       if (props.lineItem.sku_code === sku.sku)
                                         return { ...sku, ...props.lineItem }
+                                      else return undefined
                                     })
                                     .filter(
                                       (notUndefined) =>

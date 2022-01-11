@@ -61,85 +61,80 @@ export const LineItemTypes: React.FC<Props> = ({ allSkus, type }) => {
       <LineItem type={type}>
         <LineItemWrapper>
           <LineItemDescription>
-            <LineItemTitle>
-              <LineItemCode>
-                {(props) => {
-                  const item = allSkus
-                    .map((sku) => {
-                      if (props.lineItem.sku_code === sku.sku)
-                        return { ...sku, ...props.lineItem }
-                    })
-                    .filter((notUndefined) => notUndefined !== undefined)[0]
+            <LineItemTitle />
+            <LineItemCode>
+              {(props) => {
+                const item = allSkus
+                  .map((sku) => {
+                    if (props.lineItem.sku_code === sku.sku)
+                      return { ...sku, ...props.lineItem }
+                    else return undefined
+                  })
+                  .filter((notUndefined) => notUndefined !== undefined)[0]
 
-                  return (
-                    item && (
-                      <Flex
+                return (
+                  item && (
+                    <Grid columns={[".1fr .8fr .1fr"]} gap={[3]}>
+                      <Box
                         sx={{
-                          alignContent: "centet",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          width: ["100px"],
+                          height: ["auto"],
+                          top: 0,
+                          left: 0,
                         }}
                       >
-                        <Flex>
-                          <Box
-                            sx={{
-                              width: ["100px"],
-                              height: ["auto"],
-                              top: 0,
-                              left: 0,
-                            }}
-                          >
-                            {item.image && <img alt="" src={item.image.url} />}
+                        {item.image && <img alt="" src={item.image.url} />}
+                      </Box>
+                      <Flex
+                        sx={{
+                          flexDirection: "column",
+                          ml: [3],
+                        }}
+                      >
+                        <Box>
+                          <StyledLineItemSkuCode />
+                        </Box>
+                        <Flex sx={{ justifyContent: "space-between" }}>
+                          <Box>
+                            <Heading
+                              as="h6"
+                              variant="h6"
+                              sx={{
+                                my: 0,
+                                mb: 2,
+                                fontWeight: "normal",
+                              }}
+                            >
+                              {item.displayName}
+                            </Heading>
                           </Box>
-                          <Flex
-                            sx={{
-                              flexDirection: "column",
-                              ml: [3],
-                            }}
-                          >
-                            <Box>
-                              <StyledLineItemSkuCode />
-                            </Box>
-                            <Flex sx={{ justifyContent: "space-between" }}>
-                              <Box>
-                                <Heading
-                                  as="h6"
-                                  variant="h6"
-                                  sx={{
-                                    my: 0,
-                                    mb: 2,
-                                    fontWeight: "normal",
-                                  }}
-                                >
-                                  {item.displayName}
-                                </Heading>
-                              </Box>
-                            </Flex>
-                            <Flex>
-                              <Text> {item.size.name} </Text>
-                              <Text> &nbsp; - &nbsp; </Text>
-                              <Text> {item.color.name} </Text>
-                            </Flex>
-                            <Box>
-                              <LineItemQty>
-                                <LineItemQuantity>
-                                  {(props) =>
-                                    !!props.quantity &&
-                                    t("orderRecap.quantity", {
-                                      count: props.quantity,
-                                    })
-                                  }
-                                </LineItemQuantity>
-                              </LineItemQty>
-                            </Box>
-                          </Flex>
                         </Flex>
+                        <Flex>
+                          <Text> {item.size.name} </Text>
+                          <Text> &nbsp; - &nbsp; </Text>
+                          <Text> {item.color.name} </Text>
+                        </Flex>
+                        <Box sx={{ mt: [2] }}>
+                          <LineItemQty>
+                            <LineItemQuantity>
+                              {(props) =>
+                                !!props.quantity &&
+                                t("orderRecap.quantity", {
+                                  count: props.quantity,
+                                })
+                              }
+                            </LineItemQuantity>
+                          </LineItemQty>
+                        </Box>
                       </Flex>
-                    )
+                      <Flex sx={{ alignItems: "center" }}>
+                        <LineItemAmount className="pl-2 text-lg font-extrabold" />
+                      </Flex>
+                    </Grid>
                   )
-                }}
-              </LineItemCode>
-            </LineItemTitle>
+                )
+              }}
+            </LineItemCode>
             <LineItemOptions showAll showName={false}>
               <StyledLineItemOption />
             </LineItemOptions>

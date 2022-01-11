@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
 import tw from "twin.macro"
 
-import { useVariant } from "../../hooks/useSkus"
+import { request } from "../../../lib/datocms"
 
 import { CheckoutSkeleton } from "components/composite/CheckoutSkeleton"
 import { MainHeader } from "components/composite/MainHeader"
@@ -32,6 +32,41 @@ import { Accordion, AccordionItem } from "components/ui/Accordion"
 import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
 
+const SKU_QUERY = `query VariantQuery {
+  allVariants {
+    id
+    displayName
+    sku
+    image {
+      url
+      url
+    }
+    size {
+      id
+      name
+    }
+    color {
+      id
+      name
+      colorSwitcher {
+        hex
+        
+      }
+    }
+  }
+}
+`
+
+export async function loadSKUS() {
+  const data = await request({
+    query: SKU_QUERY,
+  })
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const i18nVariant = data.allVariants.filter((link: object) => link)
+
+  return i18nVariant
+}
+
 interface Props {
   logoUrl?: string
   orderNumber: number
@@ -52,6 +87,14 @@ const Checkout: React.FC<Props> = ({
   privacyUrl,
 }) => {
   const [allSkus, setAllSkus] = useState([])
+
+  useEffect(() => {
+    // Using an IIFE
+    ;(async function anyNameFunction() {
+      const data = await loadSKUS()
+      if (data) setAllSkus(data)
+    })()
+  }, [])
 
   const ctx = useContext(AppContext)
 
@@ -77,15 +120,6 @@ const Checkout: React.FC<Props> = ({
       />
     )
   }
-
-  useEffect(() => {
-    console.log(22)
-    const fetchData = async () => {
-      const res = await useVariant()
-      setAllSkus(res) // parse json
-    }
-    if (allSkus.length < 1) fetchData()
-  }, [])
 
   const renderSteps = () => {
     return (
