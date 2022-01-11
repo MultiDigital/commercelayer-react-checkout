@@ -59,6 +59,7 @@ import {
 } from "./styled"
 
 interface Props {
+  allSkus: string[]
   className?: string
   step: number
 }
