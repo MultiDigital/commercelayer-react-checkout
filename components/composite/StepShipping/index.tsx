@@ -21,10 +21,10 @@ import {
   Flex,
   Checkbox,
   Grid,
-  Image,
   Label,
   Card,
   Radio,
+  Image,
   Heading,
   Divider,
   Text,
@@ -319,10 +319,16 @@ export const StepShipping: React.FC<Props> = ({ allSkus }) => {
                                               left: 0,
                                             }}
                                           >
-                                            {item.image && (
-                                              <img
+                                            {item.image ? (
+                                              <Image
                                                 alt=""
                                                 src={item.image.url}
+                                              />
+                                            ) : (
+                                              <Image
+                                                width="50px"
+                                                alt=""
+                                                src="/img/clothes.jpeg"
                                               />
                                             )}
                                           </Box>

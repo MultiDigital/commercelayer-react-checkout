@@ -14,17 +14,18 @@ import {
   Flex,
   Checkbox,
   Grid,
-  Image,
   Label,
   Card,
   Radio,
   Heading,
+  Image,
   Divider,
   Text,
   Container,
   Input,
   Button,
 } from "@theme-ui/components"
+import { find } from "cypress/types/lodash"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 import tw from "twin.macro"
@@ -58,89 +59,103 @@ export const LineItemTypes: React.FC<Props> = ({ allSkus, type }) => {
 
   return (
     <>
-      <LineItem type={type}>
-        <LineItemWrapper>
-          <LineItemDescription>
-            <LineItemTitle />
-            <LineItemCode>
-              {(props) => {
-                const item = allSkus
-                  .map((sku) => {
-                    if (props.lineItem.sku_code === sku.sku)
-                      return { ...sku, ...props.lineItem }
-                    else return undefined
-                  })
-                  .filter((notUndefined) => notUndefined !== undefined)[0]
+      {allSkus.length > 0 ? (
+        <LineItem type={type}>
+          <LineItemWrapper>
+            <LineItemDescription>
+              <LineItemTitle />
+              <LineItemCode>
+                {(props) => {
+                  const item = allSkus
+                    .map((sku) => {
+                      if (props.skuCode === sku.sku) {
+                        return { ...sku, ...props.lineItem }
+                      }
 
-                return (
-                  item && (
-                    <Grid columns={[".1fr .8fr .1fr"]} gap={[3]}>
-                      <Box
-                        sx={{
-                          width: ["100px"],
-                          height: ["auto"],
-                          top: 0,
-                          left: 0,
-                        }}
-                      >
-                        {item.image && <img alt="" src={item.image.url} />}
-                      </Box>
-                      <Flex
-                        sx={{
-                          flexDirection: "column",
-                          ml: [3],
-                        }}
-                      >
-                        <Box>
-                          <StyledLineItemSkuCode />
+                      return undefined
+                    })
+                    .filter((notUndefined) => notUndefined !== undefined)[0]
+
+                  return (
+                    item && (
+                      <Grid columns={[".1fr .8fr .1fr"]} gap={[3]}>
+                        <Box
+                          sx={{
+                            width: ["100px"],
+                            height: ["auto"],
+                            top: 0,
+                            left: 0,
+                          }}
+                        >
+                          {item.image ? (
+                            <Image alt="" src={item.image.url} />
+                          ) : (
+                            <Image
+                              width="100px"
+                              alt=""
+                              src="/img/clothes.jpeg"
+                            />
+                          )}
                         </Box>
-                        <Flex sx={{ justifyContent: "space-between" }}>
+                        <Flex
+                          sx={{
+                            flexDirection: "column",
+                            ml: [3],
+                          }}
+                        >
                           <Box>
-                            <Heading
-                              as="h6"
-                              variant="h6"
-                              sx={{
-                                my: 0,
-                                mb: 2,
-                                fontWeight: "normal",
-                              }}
-                            >
-                              {item.displayName}
-                            </Heading>
+                            <StyledLineItemSkuCode />
+                          </Box>
+                          <Flex sx={{ justifyContent: "space-between" }}>
+                            <Box>
+                              <Heading
+                                as="h6"
+                                variant="h6"
+                                sx={{
+                                  my: 0,
+                                  mb: 2,
+                                  fontWeight: "normal",
+                                }}
+                              >
+                                {item.displayName}
+                              </Heading>
+                            </Box>
+                          </Flex>
+                          <Flex>
+                            <Text> {item.size.name} </Text>
+                            <Text> &nbsp; - &nbsp; </Text>
+                            <Text> {item.color.name} </Text>
+                          </Flex>
+                          <Box sx={{ mt: [2] }}>
+                            <LineItemQty>
+                              <LineItemQuantity>
+                                {(props) =>
+                                  !!props.quantity &&
+                                  t("orderRecap.quantity", {
+                                    count: props.quantity,
+                                  })
+                                }
+                              </LineItemQuantity>
+                            </LineItemQty>
                           </Box>
                         </Flex>
-                        <Flex>
-                          <Text> {item.size.name} </Text>
-                          <Text> &nbsp; - &nbsp; </Text>
-                          <Text> {item.color.name} </Text>
+                        <Flex sx={{ alignItems: "center" }}>
+                          <LineItemAmount className="pl-2 text-lg font-extrabold" />
                         </Flex>
-                        <Box sx={{ mt: [2] }}>
-                          <LineItemQty>
-                            <LineItemQuantity>
-                              {(props) =>
-                                !!props.quantity &&
-                                t("orderRecap.quantity", {
-                                  count: props.quantity,
-                                })
-                              }
-                            </LineItemQuantity>
-                          </LineItemQty>
-                        </Box>
-                      </Flex>
-                      <Flex sx={{ alignItems: "center" }}>
-                        <LineItemAmount className="pl-2 text-lg font-extrabold" />
-                      </Flex>
-                    </Grid>
+                      </Grid>
+                    )
                   )
-                )
-              }}
-            </LineItemCode>
-            <LineItemOptions showAll showName={false}>
-              <StyledLineItemOption />
-            </LineItemOptions>
-          </LineItemDescription>
-        </LineItemWrapper>
-      </LineItem>
+                }}
+              </LineItemCode>
+              <LineItemOptions showAll showName={false}>
+                <StyledLineItemOption />
+              </LineItemOptions>
+            </LineItemDescription>
+          </LineItemWrapper>
+        </LineItem>
+      ) : (
+        <></>
+      )}
     </>
   )
 }

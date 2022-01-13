@@ -32,39 +32,87 @@ import { Accordion, AccordionItem } from "components/ui/Accordion"
 import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
 
-const SKU_QUERY = `query VariantQuery {
-  allVariants {
-    id
-    displayName
-    sku
-    image {
-      url
-      url
-    }
-    size {
-      id
-      name
-    }
-    color {
-      id
-      name
-      colorSwitcher {
-        hex
-        
-      }
-    }
-  }
-}
-`
+// const SKU_QUERY = `query VariantQuery($limit: IntType , $skip: IntType){
+//   allVariants(first: $limit, skip : $skip) {
+//     id
+//     displayName
+//     sku
+//     image {
+//       url
+//       url
+//     }
+//     size {
+//       id
+//       name
+//     }
+//     color {
+//       id
+//       name
+//       colorSwitcher {
+//         hex
+
+//       }
+//     }
+//   }
+// }
+// `
 
 export async function loadSKUS() {
-  const data = await request({
-    query: SKU_QUERY,
-  })
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const i18nVariant = data.allVariants.filter((link: object) => link)
+  // start from 0
+  let skip = 0
 
-  return i18nVariant
+  const limit = 100
+
+  // toggle to see when we should break the loop
+  let keepQuerying = true
+
+  // we will accumulate blog posts in this array
+  let ALLSKUS = [] as any
+
+  while (keepQuerying) {
+    const data = await request({
+      query: `query  {
+        allVariants(first: ${limit}, skip : ${skip}) {
+           id
+           displayName
+           sku
+           image {
+             url
+             url
+           }
+           size {
+             id
+             name
+           }
+           color {
+             id
+             name
+             colorSwitcher {
+               hex
+               
+             }
+           }
+         }
+       }
+       `,
+    })
+
+    // aggregate results
+    ALLSKUS = ALLSKUS.concat(data.allVariants)
+
+    // adjust "cursor" to grab next batch
+    skip += limit
+
+    // see if we need to make another query
+    if (data.allVariants.length < limit) {
+      // if we got less items than we asked for
+      // it means we reached the end
+
+      keepQuerying = false
+    }
+  }
+
+  if (keepQuerying === false) return ALLSKUS
 }
 
 interface Props {
@@ -122,7 +170,7 @@ const Checkout: React.FC<Props> = ({
   }
 
   const renderSteps = () => {
-    return (
+    return allSkus.length > 0 ? (
       <CustomerContainer isGuest={ctx.isGuest}>
         <LayoutDefault
           aside={
@@ -227,6 +275,8 @@ const Checkout: React.FC<Props> = ({
           }
         />
       </CustomerContainer>
+    ) : (
+      <CheckoutSkeleton />
     )
   }
 
