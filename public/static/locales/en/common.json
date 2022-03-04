@@ -49,7 +49,7 @@
         "adjustment_amount": "Totale aggiustamenti",
         "giftcard_amount": "Carta regalo",
         "tax_amount": "Tassa",
-        "tax_included_amount": "Tassa <stile>inclusa</stile>",
+        "tax_included_amount": "Tassa <style>inclusa</style>",
         "shipping_amount": "Spedizione",
         "payment_method_amount": "Metodo di pagamento",
         "subtotal_amount": "Subtotale",

@@ -64,9 +64,23 @@ export const StepComplete: React.FC<Props> = ({
                 supportPhone={supportPhone}
               />
             </Message>
-            {ctx?.returnUrl && (
+            {ctx?.returnUrl ? (
               <WrapperButton>
                 <Button data-cy="button-continue-to-shop" onClick={handleClick}>
+                  {t("stepComplete.continue")}
+                </Button>
+
+                {""}
+              </WrapperButton>
+            ) : (
+              <WrapperButton>
+                <Button
+                  data-cy="button-continue-to-shop"
+                  onClick={() =>
+                    (document.location.href =
+                      "https://dkb-b2b.netlify.app/dashboard/")
+                  }
+                >
                   {t("stepComplete.continue")}
                 </Button>
 
